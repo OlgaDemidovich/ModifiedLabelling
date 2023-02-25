@@ -6,14 +6,6 @@ import os
 import numpy as np
 import cv2
 
-bin_bbox_path = 'bin/labels'
-bin_images_path = 'bin/images'
-
-if os.path.isdir(bin_bbox_path) == False:
-    os.makedirs(bin_bbox_path)
-if os.path.isdir(bin_images_path) == False:
-    os.makedirs(bin_images_path)
-
 WITH_QT = True
 try:
     cv2.namedWindow("Test")
