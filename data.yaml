@@ -1,0 +1,13 @@
+train: /content/drive/MyDrive/ColabNotebooks/datasets/traffic_signs/train/images
+val: /content/drive/MyDrive/ColabNotebooks/datasets/traffic_signs/val/images
+
+nc: 8
+names:
+  - "Road works"
+  - "Parking"
+  - "No entry"
+  - "Pedestrian crossing"
+  - "Movement prohibition"
+  - "Artificial roughness"
+  - "Give way"
+  - "Stop"
