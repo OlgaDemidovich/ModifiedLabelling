@@ -31,7 +31,8 @@ class_index = 0
 img_index = 0
 img = None
 img_objects = []
-bb_dir = "labels/"
+img_dir = r"yami_img/"
+bb_dir = r"yami_leb/"
 
 # selected bounding box
 prev_was_double_click = False
@@ -326,15 +327,14 @@ def draw_info_bb_selected(tmp_img):
 
 
 def remove_bad_data(img_path, img_path_txt):
-    img_name = img_path.split('/')[-1]
-    txt_name = img_path_txt.split('/')[-1]
+    img_name = img_path.replace('/', '/bin/')
+    txt_name = img_path_txt.replace('/', '/bin/')
 
-    os.rename(img_path, os.path.join('bin/images', img_name))
-    os.rename(img_path_txt, os.path.join('bin/labels', txt_name))
+    os.rename(img_path, img_name)
+    os.rename(img_path_txt, txt_name)
 
 
 # load all images (with multiple extensions) from a directory using OpenCV
-img_dir = "images/"
 image_list = []
 for f in os.listdir(img_dir):
     f_path = os.path.join(img_dir, f)
@@ -384,8 +384,8 @@ if num_colors_missing > 0:
 # create window
 WINDOW_NAME = 'Bounding Box Labeler'
 cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
-# cv2.resizeWindow(WINDOW_NAME, 1000, 700)
-cv2.resizeWindow(WINDOW_NAME, 500, 500)
+cv2.resizeWindow(WINDOW_NAME, 1000, 700)
+# cv2.resizeWindow(WINDOW_NAME, 500, 500)
 cv2.setMouseCallback(WINDOW_NAME, mouse_listener)
 
 # selected image
@@ -425,6 +425,7 @@ while True:
 
     # draw already done bounding boxes
     tmp_img = draw_bboxes_from_file(tmp_img, txt_path, width, height)
+
     # if bounding box is selected add extra info
     if is_bbox_selected:
         tmp_img = draw_info_bb_selected(tmp_img)
@@ -450,6 +451,10 @@ while True:
                 cv2.displayOverlay(WINDOW_NAME, "Selected label: " + class_list[
                     class_index] + ""
                                    "\nPress [w] or [s] to change.", 120)
+
+    # draw lines of mouse x y
+    cv2.line(tmp_img, (0, mouse_y), (width, mouse_y), class_rgb[-1].tolist())
+    cv2.line(tmp_img, (mouse_x, 0), (mouse_x, height), class_rgb[-1].tolist())
 
     cv2.imshow(WINDOW_NAME, tmp_img)
     pressed_key = cv2.waitKey(50)
@@ -495,7 +500,7 @@ while True:
         else:
             del image_list[img_index - 1]
             last_img_index = len(image_list) - 1
-
+            print(bad_path, bad_text)
             remove_bad_data(bad_path, bad_text)
 
             img_index -= 1
